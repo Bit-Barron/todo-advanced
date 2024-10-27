@@ -42,21 +42,33 @@ export async function createTodo({
   }
 }
 
-export async function updateTodo(
-  id: number,
-  data: Partial<typeof todos.$inferSelect>
-) {
+export async function updateTodo({
+  id,
+  completed,
+}: {
+  id: number;
+  completed: boolean;
+}) {
   try {
-    return await db.update(todos).set(data).where(eq(todos.id, id));
+    const response = await db
+      .update(todos)
+      .set({
+        completed,
+      })
+      .where(eq(todos.id, id));
+
+    return response;
   } catch (error) {
-    console.error("Error updating todo:", error);
     throw error;
   }
 }
 
 export async function deleteTodo(id: number) {
   try {
-    return await db.delete(todos).where(eq(todos.id, id));
+    const deleteTodo = db.delete(todos).where(eq(todos.id, id));
+
+    console.log(deleteTodo);
+    return deleteTodo;
   } catch (error) {
     console.error("Error deleting todo:", error);
     throw error;

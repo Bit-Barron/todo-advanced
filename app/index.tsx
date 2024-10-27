@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { Text } from "~/components/ui/text";
 import { Input } from "~/components/ui/input";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import { getAllTodos } from "~/db/db";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import { deleteTodo, getAllTodos, updateTodo } from "~/db/db";
 import { Priority } from "~/utils/constants";
 import { MyDialog } from "~/components/pages/home/dialog";
 import { TodoStore } from "../store/TodoStore";
@@ -11,14 +11,6 @@ import { TodoStore } from "../store/TodoStore";
 export default function Screen() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const { todos, setTodos } = TodoStore();
-
-  const toggleTask = (taskId: number) => {
-    setCompletedTasks((prev) =>
-      prev.includes(taskId)
-        ? prev.filter((id) => id !== taskId)
-        : [...prev, taskId]
-    );
-  };
 
   const calculateProgress = () => {
     return Math.round((completedTasks.length / todos.length) * 100);
@@ -40,6 +32,43 @@ export default function Screen() {
       });
   }, []);
 
+  const handleDeleteTodo = (id: number) => {
+    deleteTodo(id)
+      .then(() => {
+        setTodos(todos.filter((todo) => todo.id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting todo:", error);
+      });
+  };
+
+  const handleCompleteTask = (id: number) => {
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) return;
+
+    const newCompletedState = !todo.completed;
+
+    updateTodo({
+      id,
+      completed: newCompletedState,
+    })
+      .then(() => {
+        setTodos(
+          todos.map((todo) =>
+            todo.id === id ? { ...todo, completed: newCompletedState } : todo
+          )
+        );
+        if (newCompletedState) {
+          setCompletedTasks((prev) => [...prev, id]);
+        } else {
+          setCompletedTasks((prev) => prev.filter((taskId) => taskId !== id));
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating todo:", error);
+      });
+  };
+
   return (
     <ScrollView className="flex-1">
       <View className="px-6 pt-16 pb-20">
@@ -53,14 +82,14 @@ export default function Screen() {
         <View className="flex-row gap-3 mb-6">
           <View className="flex-1">
             <Input
-              className="bg-[#243B67] border-0 h-12 text-white"
+              className="bg-cardColor border-0 h-12 text-white"
               placeholder="Search"
             />
           </View>
           <AntDesign name="search1" size={25} className="mt-2" color="white" />
         </View>
 
-        <View className="mb-8 bg-[#243B67] p-6 rounded-2xl">
+        <View className="mb-8 bg-cardColor p-6 rounded-2xl">
           <Text className="text-white text-lg font-semibold mb-1">
             Task Progress
           </Text>
@@ -105,8 +134,7 @@ export default function Screen() {
               return (
                 <TouchableOpacity
                   key={task.id}
-                  onPress={() => toggleTask(task.id)}
-                  className={`flex-row justify-between items-center bg-[#243B67] p-4 rounded-xl ${
+                  className={`flex-row justify-between items-center bg-cardColor p-4 rounded-xl ${
                     index !== 0 ? "mt-3" : ""
                   }`}
                   activeOpacity={0.7}
@@ -134,7 +162,20 @@ export default function Screen() {
                       </Text>
                     </View>
                   </View>
-                  <Feather name="more-vertical" size={24} color="white" />
+                  <View>
+                    <TouchableOpacity onPress={() => handleDeleteTodo(task.id)}>
+                      <Entypo name="trash" size={24} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleCompleteTask(task.id);
+                        setCompletedTasks([...completedTasks, task.id]);
+                      }}
+                      className="mt-6"
+                    >
+                      <AntDesign name="check" size={24} color="white" />
+                    </TouchableOpacity>
+                  </View>
                 </TouchableOpacity>
               );
             })}
