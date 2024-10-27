@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { Text } from "~/components/ui/text";
 import { Input } from "~/components/ui/input";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 import { deleteTodo, getAllTodos, updateTodo } from "~/db/db";
 import { Priority } from "~/utils/constants";
 import { MyDialog } from "~/components/pages/home/dialog";
@@ -26,6 +26,11 @@ export default function Screen() {
             priority: todo.priority as Priority["name"],
           }))
         );
+        // Initialize completedTasks with already completed todos
+        const completed = todos
+          .filter((todo) => todo.completed)
+          .map((todo) => todo.id);
+        setCompletedTasks(completed);
       })
       .catch((error) => {
         console.error("Error fetching todos:", error);
@@ -36,6 +41,7 @@ export default function Screen() {
     deleteTodo(id)
       .then(() => {
         setTodos(todos.filter((todo) => todo.id !== id));
+        setCompletedTasks((prev) => prev.filter((taskId) => taskId !== id));
       })
       .catch((error) => {
         console.error("Error deleting todo:", error);
@@ -131,6 +137,8 @@ export default function Screen() {
                   background = "bg-yellow-600";
               }
 
+              const isCompleted = completedTasks.includes(task.id);
+
               return (
                 <TouchableOpacity
                   key={task.id}
@@ -147,7 +155,7 @@ export default function Screen() {
                     </Text>
                     <Text
                       className={`text-lg ${
-                        completedTasks.includes(task.id)
+                        isCompleted
                           ? "text-gray-400 line-through"
                           : "text-white"
                       }`}
@@ -167,13 +175,14 @@ export default function Screen() {
                       <Entypo name="trash" size={24} color="white" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => {
-                        handleCompleteTask(task.id);
-                        setCompletedTasks([...completedTasks, task.id]);
-                      }}
+                      onPress={() => handleCompleteTask(task.id)}
                       className="mt-6"
                     >
-                      <AntDesign name="check" size={24} color="white" />
+                      {isCompleted ? (
+                        <AntDesign name="close" size={24} color="white" />
+                      ) : (
+                        <AntDesign name="check" size={24} color="white" />
+                      )}
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
