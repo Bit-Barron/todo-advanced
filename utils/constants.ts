@@ -1,20 +1,19 @@
-export const ONGOING = [
-  {
-    id: 1,
-    title: "Finish Homework",
-  },
-  {
-    id: 2,
-    title: "Do Laundry",
-  },
-  {
-    id: 3,
-    title: "Clean Room",
-  },
-  {
-    id: 4,
-    title: "Go to the gym",
-  },
-] as const;
+export interface Priority {
+  name: "High" | "Medium" | "Low";
+  color: string;
+}
 
-export type Priority = "High" | "Medium" | "Low";
+export const priorities: Priority[] = [
+  {
+    name: "High",
+    color: "bg-red-600",
+  },
+  {
+    name: "Medium",
+    color: "bg-yellow-600",
+  },
+  {
+    name: "Low",
+    color: "bg-green-600",
+  },
+];

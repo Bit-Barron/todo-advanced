@@ -1,14 +1,8 @@
-import type { Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 
-// @ts-ignore
-const config: Config = {
-  schema: "./src/db/schema.ts",
-  out: "./src/db/migrations",
-  driver: "better-sqlite",
+export default defineConfig({
+  schema: "./db/schema.ts",
+  out: "./drizzle",
   dialect: "sqlite",
-  dbCredentials: {
-    url: "./todoapp.db",
-  },
-};
-
-export default config;
+  driver: "expo",
+});

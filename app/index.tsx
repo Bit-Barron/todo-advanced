@@ -1,30 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { Text } from "~/components/ui/text";
-import { ONGOING } from "~/utils/constants";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/ui/dialog";
-import { Textarea } from "~/components/ui/textarea";
-import { MyDropdownMenu } from "~/components/pages/home/dropdown";
-import { createTodo } from "~/db/db";
+import { AntDesign, Feather } from "@expo/vector-icons";
+import { getAllTodos } from "~/db/db";
+import { Todos } from "~/types";
+import { Priority } from "~/utils/constants";
+import { MyDialog } from "~/components/pages/home/dialog";
 
 export default function Screen() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
-  const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("medium");
-  const [message, setMessage] = useState("");
+  const [todos, setTodos] = useState<Todos[]>([]);
 
   const toggleTask = (taskId: number) => {
     setCompletedTasks((prev) =>
@@ -35,13 +21,27 @@ export default function Screen() {
   };
 
   const calculateProgress = () => {
-    return Math.round((completedTasks.length / ONGOING.length) * 100);
+    return Math.round((completedTasks.length / todos.length) * 100);
   };
 
-  const handleNewTodo = () => {};
+  useEffect(() => {
+    getAllTodos()
+      .then((todos) => {
+        setTodos(
+          todos.map((todo) => ({
+            ...todo,
+            createdAt: todo.createdAt.toString(),
+            priority: todo.priority as Priority["name"],
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching todos:", error);
+      });
+  }, []);
 
   return (
-    <ScrollView className="flex-1 ">
+    <ScrollView className="flex-1">
       <View className="px-6 pt-16 pb-20">
         <Text className="text-gray-400 text-lg">Hey, Barron</Text>
         <View className="mt-2 mb-6">
@@ -53,20 +53,20 @@ export default function Screen() {
         <View className="flex-row gap-3 mb-6">
           <View className="flex-1">
             <Input
-              className="bg-[#243B67] border-0 h-12 text-white "
+              className="bg-[#243B67] border-0 h-12 text-white"
               placeholder="Search"
             />
           </View>
-          <Button>
-            <AntDesign name="search1" size={20} color="#182842" />
-          </Button>
+          <AntDesign name="search1" size={25} className="mt-2" color="white" />
         </View>
 
         <View className="mb-8 bg-[#243B67] p-6 rounded-2xl">
           <Text className="text-white text-lg font-semibold mb-1">
             Task Progress
           </Text>
-          <Text className="text-gray-400 text-sm mb-3">30/40 task done</Text>
+          <Text className="text-gray-400 text-sm mb-3">
+            {completedTasks.length}/{todos.length} task done
+          </Text>
           <View className="h-2 bg-[#2F497D] rounded-full overflow-hidden mb-2">
             <View
               className="h-full bg-blue-500 rounded-full"
@@ -81,80 +81,67 @@ export default function Screen() {
         <View className="mb-6">
           <View className="flex flex-row justify-between">
             <Text className="text-white text-2xl font-semibold mb-4">
-              Ongoing
+              Ongoing Tasks
             </Text>
             <Text className="text-white">see all</Text>
           </View>
           <View>
-            {ONGOING.map((task, index) => (
-              <TouchableOpacity
-                key={task.id}
-                onPress={() => toggleTask(task.id)}
-                className={`flex-row justify-between items-center bg-[#243B67] p-4 rounded-xl ${
-                  index !== 0 ? "mt-3" : ""
-                }`}
-                activeOpacity={0.7}
-              >
-                <View className="ml-4">
-                  <Text className="bg-red-600 rounded-full text-center w-16">
-                    High
-                  </Text>
-                  <Text
-                    className={`text-lg ${
-                      completedTasks.includes(task.id)
-                        ? "text-gray-400 line-through"
-                        : "text-white"
-                    }`}
-                  >
-                    {task.title}
-                  </Text>
-                  <Text className="text-gray-400">10:00 AM - 06:00 PM</Text>
-                  <View className="flex flex-row gap-2 mt-4">
-                    <Text className="text-gray-400">Due Date:</Text>
-                    <Text>Augost 25</Text>
-                  </View>
-                </View>
-                <View
-                  className={`w-6 h-6 rounded-full justify-center items-center border-2 ${
-                    completedTasks.includes(task.id)
-                      ? "bg-blue-500 border-blue-500"
-                      : "border-gray-400"
+            {todos.map((task, index) => {
+              let background = "white";
+              switch (task.priority) {
+                case "High":
+                  background = "bg-red-600";
+                  break;
+                case "Medium":
+                  background = "bg-yellow-600";
+                  break;
+                case "Low":
+                  background = "bg-green-600";
+                  break;
+                default:
+                  background = "bg-yellow-600";
+              }
+
+              return (
+                <TouchableOpacity
+                  key={task.id}
+                  onPress={() => toggleTask(task.id)}
+                  className={`flex-row justify-between items-center bg-[#243B67] p-4 rounded-xl ${
+                    index !== 0 ? "mt-3" : ""
                   }`}
+                  activeOpacity={0.7}
                 >
-                  {completedTasks.includes(task.id) && (
-                    <Ionicons name="checkmark" size={16} color="white" />
-                  )}
-                </View>
-              </TouchableOpacity>
-            ))}
+                  <View className="ml-4">
+                    <Text
+                      className={`text-white rounded-full w-20 text-center ${background}`}
+                    >
+                      {task.priority}
+                    </Text>
+                    <Text
+                      className={`text-lg ${
+                        completedTasks.includes(task.id)
+                          ? "text-gray-400 line-through"
+                          : "text-white"
+                      }`}
+                    >
+                      {task.title}
+                    </Text>
+                    <Text className="text-gray-400">{task.description}</Text>
+                    <View className="flex flex-row gap-2 mt-4">
+                      <Text className="text-gray-400">Created:</Text>
+                      <Text className="text-white">
+                        {new Date(task.createdAt).toLocaleDateString()}
+                      </Text>
+                    </View>
+                  </View>
+                  <Feather name="more-vertical" size={24} color="white" />
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <Text>New Todo</Text>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add new Todo</DialogTitle>
-              <DialogDescription>
-                Add new Todo. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <Input className="" placeholder="Todo Title" />
-            <Textarea className="mt-4" placeholder="Todo Description" />
-            <MyDropdownMenu />
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button>
-                  <Text>OK</Text>
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <MyDialog />
       </View>
     </ScrollView>
   );

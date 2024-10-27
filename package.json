@@ -10,7 +10,8 @@
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
-    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css"
+    "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css",
+    "generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.23.1",
@@ -23,17 +24,20 @@
     "@rn-primitives/slot": "^1.1.0",
     "@rn-primitives/tooltip": "~1.1.0",
     "@rn-primitives/types": "^1.1.0",
+    "babel-plugin-inline-import": "^3.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "drizzle-kit": "^0.26.2",
     "drizzle-orm": "^0.35.3",
     "expo": "^51.0.38",
     "expo-linking": "~6.3.1",
     "expo-navigation-bar": "~3.0.7",
     "expo-router": "^3.1.0",
     "expo-splash-screen": "~0.27.5",
-    "expo-sqlite": "^15.0.1",
+    "expo-sqlite": "~14.0.6",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
+    "immer": "^10.1.1",
     "lucide-react": "^0.453.0",
     "lucide-react-native": "^0.378.0",
     "nativewind": "^4.0.33",
@@ -48,12 +52,12 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "3.3.5",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^4.4.7"
+    "zustand": "^4.5.5",
+    "expo-dev-client": "~4.0.28"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.79",
-    "drizzle-kit": "^0.26.2",
     "typescript": "~5.3.3"
   },
   "private": true
