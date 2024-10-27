@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { Text } from "~/components/ui/text";
 import { Input } from "~/components/ui/input";
-import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { deleteTodo, getAllTodos, updateTodo } from "~/db/db";
 import { Priority } from "~/utils/constants";
-import { MyDialog } from "~/components/pages/home/dialog";
 import { TodoStore } from "../store/TodoStore";
 
 export default function Screen() {
@@ -26,7 +25,6 @@ export default function Screen() {
             priority: todo.priority as Priority["name"],
           }))
         );
-        // Initialize completedTasks with already completed todos
         const completed = todos
           .filter((todo) => todo.completed)
           .map((todo) => todo.id);
@@ -121,7 +119,7 @@ export default function Screen() {
             <Text className="text-white">see all</Text>
           </View>
           <View>
-            {todos.map((task, index) => {
+            {todos.slice(1, 5).map((task, index) => {
               let background = "white";
               switch (task.priority) {
                 case "High":
@@ -190,8 +188,6 @@ export default function Screen() {
             })}
           </View>
         </View>
-
-        <MyDialog />
       </View>
     </ScrollView>
   );

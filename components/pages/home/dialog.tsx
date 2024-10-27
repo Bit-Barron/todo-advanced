@@ -17,7 +17,7 @@ import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { createTodo, getAllTodos } from "~/db/db";
 import { TodoStore } from "~/store/TodoStore";
-
+import { Ionicons } from "@expo/vector-icons";
 export function MyDialog() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -51,9 +51,9 @@ export function MyDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Text>New Todo</Text>
-        </Button>
+        <TouchableOpacity>
+          <Ionicons name="add" size={24} color="white" />
+        </TouchableOpacity>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-[#303642]">
         <DialogHeader>

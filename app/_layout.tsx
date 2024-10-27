@@ -9,6 +9,7 @@ import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "@rn-primitives/portal";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { View } from "react-native";
+import { BottomNavigation } from "~/components/pages/home/floating-island";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -67,8 +68,23 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="todos/index"
+          options={{
+            title: "Todos",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="categories/index"
+          options={{
+            title: "Todos",
+            headerShown: false,
+          }}
+        />
       </Stack>
       <PortalHost />
+      <BottomNavigation />
     </View>
   );
 }
