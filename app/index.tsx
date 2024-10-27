@@ -4,13 +4,13 @@ import { Text } from "~/components/ui/text";
 import { Input } from "~/components/ui/input";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { getAllTodos } from "~/db/db";
-import { Todos } from "~/types";
 import { Priority } from "~/utils/constants";
 import { MyDialog } from "~/components/pages/home/dialog";
+import { TodoStore } from "../store/TodoStore";
 
 export default function Screen() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
-  const [todos, setTodos] = useState<Todos[]>([]);
+  const { todos, setTodos } = TodoStore();
 
   const toggleTask = (taskId: number) => {
     setCompletedTasks((prev) =>

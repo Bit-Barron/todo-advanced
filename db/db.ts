@@ -33,6 +33,8 @@ export async function createTodo({
       createdAt: new Date(),
     });
 
+    console.log("new todo backend", response);
+
     return response;
   } catch (error) {
     console.error("Error creating todo:", error);

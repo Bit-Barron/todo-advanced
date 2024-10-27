@@ -12,21 +12,20 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
-import { Todos } from "~/types";
 import { priorities, Priority } from "~/utils/constants";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { createTodo, getAllTodos } from "~/db/db";
+import { TodoStore } from "~/store/TodoStore";
 
 export function MyDialog() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [todos, setTodos] = useState<Todos[]>([]);
+  const { setTodos, todos } = TodoStore();
   const [priority, setPriority] = useState<Priority["name"]>("Medium");
 
   const handleNewTodo = async () => {
     try {
-      if (!title || !description || priority) return;
       await createTodo({
         title,
         description,
