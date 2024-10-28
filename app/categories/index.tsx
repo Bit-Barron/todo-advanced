@@ -5,6 +5,7 @@ import { categories } from "~/utils/constants";
 import { CategoryItem } from "~/components/pages/home/category-item";
 import { SubCategoryItem } from "~/components/pages/home/subcategory-item";
 import { Button } from "~/components/ui/button";
+import { MyDialog } from "~/components/elements/my-dialog";
 
 export default function CategoriesScreen() {
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
@@ -47,9 +48,11 @@ export default function CategoriesScreen() {
                   <SubCategoryItem key={subCategory.id} item={subCategory} />
                 </>
               ))}
-              <Button>
-                <Text>New Subcategory</Text>
-              </Button>
+              <MyDialog
+                dialogTrigger={"New Subcategory"}
+                dialogTitle={"Create new Subcategory"}
+                dialogDescription="Add new Subcategory. Click save when you're done."
+              />
             </View>
           )}
         </View>

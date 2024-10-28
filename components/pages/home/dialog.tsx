@@ -50,29 +50,23 @@ export function MyDialog() {
   };
 
   return (
-    <Dialog className="bg-blue-500 p-4 rounded-full -mt-8">
+    <Dialog className="bg-blue-600 p-4 rounded-full -mt-8">
       <DialogTrigger asChild>
         <TouchableOpacity>
           <Ionicons name="add" size={24} color="white" />
         </TouchableOpacity>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-[#303642]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-white">Add new Todo</DialogTitle>
+          <DialogTitle>Add new Todo</DialogTitle>
           <DialogDescription className="text-gray-400">
             Add new Todo. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <Input
-          value={title}
-          onChangeText={setTitle}
-          className="bg-[#243B67] border-0 h-12 text-white"
-          placeholder="Todo Title"
-        />
+        <Input value={title} onChangeText={setTitle} placeholder="Todo Title" />
         <Textarea
           value={description}
           onChangeText={setDescription}
-          className="bg-[#243B67] border-0 h-12 text-white"
           placeholder="Todo Description"
         />
         <View className="flex-row justify-around items-center mt-4">
@@ -91,7 +85,7 @@ export function MyDialog() {
         </View>
         <DialogFooter>
           <DialogClose asChild>
-            <Button onPress={handleNewTodo} className="bg-blue-600 w-full mt-4">
+            <Button onPress={handleNewTodo}>
               <Text className="text-white">Submit</Text>
             </Button>
           </DialogClose>
