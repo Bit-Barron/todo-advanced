@@ -18,10 +18,11 @@ import { Text } from "~/components/ui/text";
 import { createTodo, getAllTodos } from "~/db/db";
 import { TodoStore } from "~/store/TodoStore";
 import { Ionicons } from "@expo/vector-icons";
+
 export function MyDialog() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const { setTodos, todos } = TodoStore();
+  const { setTodos } = TodoStore();
   const [priority, setPriority] = useState<Priority["name"]>("Medium");
 
   const handleNewTodo = async () => {

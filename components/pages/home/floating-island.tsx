@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   AntDesign,
   MaterialCommunityIcons,
-  Ionicons,
+  Foundation,
 } from "@expo/vector-icons";
 import { MyDialog } from "./dialog";
 import { useRouter } from "expo-router";
@@ -56,9 +56,12 @@ export const BottomNavigation = () => {
           <Text className="text-white text-xs mt-1">Categories</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="items-center">
-          <Ionicons name="stats-chart" size={24} color="white" />
-          <Text className="text-white text-xs mt-1">Stats</Text>
+        <TouchableOpacity
+          onPress={() => router.push("/categories")}
+          className="items-center"
+        >
+          <Foundation name="clipboard-notes" size={24} color="white" />
+          <Text className="text-white text-xs mt-1">Notes</Text>
         </TouchableOpacity>
       </View>
     </View>

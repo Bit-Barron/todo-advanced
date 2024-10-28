@@ -11,3 +11,14 @@ export const todos = sqliteTable("todos", {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const subCategories = sqliteTable("subCategories", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  categoryId: integer("category_id").notNull(),
+});
+
+export const categories = sqliteTable("categories", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+});

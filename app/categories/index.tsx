@@ -4,6 +4,7 @@ import { Text } from "~/components/ui/text";
 import { categories } from "~/utils/constants";
 import { CategoryItem } from "~/components/pages/home/category-item";
 import { SubCategoryItem } from "~/components/pages/home/subcategory-item";
+import { Button } from "~/components/ui/button";
 
 export default function CategoriesScreen() {
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
@@ -42,8 +43,13 @@ export default function CategoriesScreen() {
           {expandedCategory === category.id && (
             <View className="ml-4 mt-2 space-y-2">
               {category.subCategories.map((subCategory) => (
-                <SubCategoryItem key={subCategory.id} item={subCategory} />
+                <>
+                  <SubCategoryItem key={subCategory.id} item={subCategory} />
+                </>
               ))}
+              <Button>
+                <Text>New Subcategory</Text>
+              </Button>
             </View>
           )}
         </View>
