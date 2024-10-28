@@ -27,7 +27,6 @@ export const BottomNavigation = () => {
         <TouchableOpacity className="items-center">
           <MyDialog />
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={() => router.push("/todos")}
           className="items-center"
