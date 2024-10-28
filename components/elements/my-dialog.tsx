@@ -17,12 +17,18 @@ interface MyDialogProps {
   dialogTrigger: string;
   dialogTitle: string;
   dialogDescription?: string;
+  action?: () => void;
+  placeholder?: string;
+  onChange?: (text: string) => void;
 }
 
 export function MyDialog({
   dialogTrigger,
   dialogTitle,
+  action,
   dialogDescription,
+  placeholder,
+  onChange,
 }: MyDialogProps) {
   return (
     <Dialog>
@@ -31,15 +37,18 @@ export function MyDialog({
           <Text>{dialogTrigger}</Text>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[525px] w-[400px]">
+      <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{dialogDescription}</DialogDescription>
         </DialogHeader>
-        <Input />
+        <Input
+          onChangeText={(text) => onChange && onChange(text)}
+          placeholder={placeholder}
+        />
         <DialogFooter>
           <DialogClose asChild>
-            <Button>
+            <Button onPress={() => action && action()}>
               <Text>Save</Text>
             </Button>
           </DialogClose>

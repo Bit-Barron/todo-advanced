@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { openDatabaseSync } from "expo-sqlite/next";
-import { todos } from "./schema";
+import { categories, todos } from "./schema";
 import { eq } from "drizzle-orm";
 
 const expo = openDatabaseSync("db.db");
@@ -71,6 +71,30 @@ export async function deleteTodo(id: number) {
     return deleteTodo;
   } catch (error) {
     console.error("Error deleting todo:", error);
+    throw error;
+  }
+}
+
+export async function createCategory({ name }: { name: string }) {
+  try {
+    const response = await db.insert(categories).values({
+      name,
+    });
+
+    console.log("new category backend", response);
+
+    return response;
+  } catch (error) {
+    console.error("Error creating category:", error);
+    throw error;
+  }
+}
+
+export async function getAllCategories() {
+  try {
+    return await db.select().from(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
     throw error;
   }
 }

@@ -1,14 +1,36 @@
-import React, { useState } from "react";
-import { View, ScrollView, TouchableOpacity, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, ScrollView, Platform } from "react-native";
 import { Text } from "~/components/ui/text";
 import { categories } from "~/utils/constants";
 import { CategoryItem } from "~/components/pages/home/category-item";
 import { SubCategoryItem } from "~/components/pages/home/subcategory-item";
-import { Button } from "~/components/ui/button";
 import { MyDialog } from "~/components/elements/my-dialog";
+import { createCategory, getAllCategories } from "~/db/db";
 
 export default function CategoriesScreen() {
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
+  const [category, setCategory] = useState<string>("");
+  const [subCategory, setSubCategory] = useState<string>("");
+
+  const createNewCategory = async () => {
+    try {
+      const response = await createCategory({
+        name: category,
+      });
+
+      console.log(response);
+      return response;
+    } catch (err) {
+      console.error("Error creating category:", err);
+    }
+  };
+
+  useEffect(() => {
+    const response = getAllCategories().then((categories) => {
+      console.log(categories);
+    });
+    console.log(response);
+  }, []);
 
   return (
     <ScrollView
@@ -21,12 +43,14 @@ export default function CategoriesScreen() {
     >
       <View className="flex-row items-center justify-between mb-6 mt-10">
         <Text className="text-white text-2xl font-bold">Categories</Text>
-        <TouchableOpacity
-          onPress={() => setExpandedCategory(null)}
-          className="bg-gray-800 rounded-lg px-3 py-1.5"
-        >
-          <Text className="text-gray-300 text-sm">Collapse all</Text>
-        </TouchableOpacity>
+        <MyDialog
+          dialogTrigger={"New Category"}
+          dialogTitle={"Create new Category"}
+          dialogDescription="Add new Category. Click save when you're done."
+          action={createNewCategory}
+          placeholder="Category"
+          onChange={setCategory}
+        />
       </View>
 
       {categories.map((category) => (
@@ -52,6 +76,9 @@ export default function CategoriesScreen() {
                 dialogTrigger={"New Subcategory"}
                 dialogTitle={"Create new Subcategory"}
                 dialogDescription="Add new Subcategory. Click save when you're done."
+                action={createNewCategory}
+                placeholder="Subcategory"
+                onChange={setSubCategory}
               />
             </View>
           )}
