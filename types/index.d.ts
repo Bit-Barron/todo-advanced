@@ -6,3 +6,14 @@ export interface Todos {
   completed: boolean;
   createdAt: string;
 }
+
+export interface SubCategory {
+  id: number;
+  name: string;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  subCategories: SubCategory[];
+}

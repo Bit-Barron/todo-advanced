@@ -6,10 +6,12 @@ import { AntDesign, Entypo } from "@expo/vector-icons";
 import { deleteTodo, getAllTodos, updateTodo } from "~/db/db";
 import { Priority } from "~/utils/constants";
 import { TodoStore } from "../store/TodoStore";
+import { useRouter } from "expo-router";
 
 export default function Screen() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const { todos, setTodos } = TodoStore();
+  const router = useRouter();
 
   const calculateProgress = () => {
     return Math.round((completedTasks.length / todos.length) * 100);
@@ -116,7 +118,12 @@ export default function Screen() {
             <Text className="text-white text-2xl font-semibold mb-4">
               Ongoing Tasks
             </Text>
-            <Text className="text-white">see all</Text>
+            <TouchableOpacity
+              onPress={() => router.push("/todos")}
+              className="text-white"
+            >
+              <Text className="text-white">see all</Text>
+            </TouchableOpacity>
           </View>
           <View>
             {todos.slice(1, 5).map((task, index) => {

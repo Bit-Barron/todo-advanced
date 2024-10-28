@@ -49,7 +49,7 @@ export function MyDialog() {
   };
 
   return (
-    <Dialog>
+    <Dialog className="bg-blue-500 p-4 rounded-full -mt-8">
       <DialogTrigger asChild>
         <TouchableOpacity>
           <Ionicons name="add" size={24} color="white" />

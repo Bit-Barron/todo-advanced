@@ -41,9 +41,7 @@ export const BottomNavigation = () => {
         </TouchableOpacity>
 
         <TouchableOpacity className="items-center">
-          <View className="bg-blue-500 p-4 rounded-full -mt-8">
-            <MyDialog />
-          </View>
+          <MyDialog />
         </TouchableOpacity>
 
         <TouchableOpacity
