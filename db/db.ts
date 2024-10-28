@@ -67,34 +67,9 @@ export async function deleteTodo(id: number) {
   try {
     const deleteTodo = db.delete(todos).where(eq(todos.id, id));
 
-    console.log(deleteTodo);
     return deleteTodo;
   } catch (error) {
     console.error("Error deleting todo:", error);
-    throw error;
-  }
-}
-
-export async function createCategory({ name }: { name: string }) {
-  try {
-    const response = await db.insert(categories).values({
-      name,
-    });
-
-    console.log("new category backend", response);
-
-    return response;
-  } catch (error) {
-    console.error("Error creating category:", error);
-    throw error;
-  }
-}
-
-export async function getAllCategories() {
-  try {
-    return await db.select().from(categories);
-  } catch (error) {
-    console.error("Error fetching categories:", error);
     throw error;
   }
 }

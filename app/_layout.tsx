@@ -75,13 +75,6 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="categories/index"
-          options={{
-            title: "Todos",
-            headerShown: false,
-          }}
-        />
       </Stack>
       <PortalHost />
       <BottomNavigation />

@@ -2,11 +2,7 @@ import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import { Text } from "~/components/ui/text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-  AntDesign,
-  MaterialCommunityIcons,
-  Foundation,
-} from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { MyDialog } from "./dialog";
 import { useRouter } from "expo-router";
 
@@ -28,6 +24,10 @@ export const BottomNavigation = () => {
           <Text className="text-white text-xs mt-1">Home</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity className="items-center">
+          <MyDialog />
+        </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => router.push("/todos")}
           className="items-center"
@@ -38,30 +38,6 @@ export const BottomNavigation = () => {
             color="white"
           />
           <Text className="text-white text-xs mt-1">Todos</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="items-center">
-          <MyDialog />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => router.push("/categories")}
-          className="items-center"
-        >
-          <MaterialCommunityIcons
-            name="format-list-group"
-            size={24}
-            color="white"
-          />
-          <Text className="text-white text-xs mt-1">Categories</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => router.push("/categories")}
-          className="items-center"
-        >
-          <Foundation name="clipboard-notes" size={24} color="white" />
-          <Text className="text-white text-xs mt-1">Notes</Text>
         </TouchableOpacity>
       </View>
     </View>
